@@ -1,4 +1,4 @@
-import { IFlag, isActive } from "./config-cat.client";
+import { IFlag, isActive } from "./config-cat";
 
 export const flags: IFlag[] = [
   {
