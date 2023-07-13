@@ -1,5 +1,3 @@
-import { flags } from "../services/feature-flag/feature-flags";
-
 export default defineEventHandler(async (event) => {
   try {
     const path = getRequestPath(event);
