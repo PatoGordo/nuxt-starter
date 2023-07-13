@@ -16,6 +16,7 @@
     "@nuxt/devtools": "latest",
     "@types/node": "^18.16.19",
     "nuxt": "^3.6.2",
+    "nuxt-security": "^0.13.1",
     "prisma": "^5.0.0"
   },
   "dependencies": {
