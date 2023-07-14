@@ -17,6 +17,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.16.19",
+    "@types/nodemailer": "^6.4.8",
     "nuxt": "^3.6.2",
     "nuxt-security": "^0.13.1",
     "prisma": "^5.0.0"
@@ -27,6 +28,8 @@
     "configcat-node": "^10.0.1",
     "dotenv": "^16.3.1",
     "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
+    "nodemailer": "^6.9.3",
     "zod": "^3.21.4"
   }
 }
