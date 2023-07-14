@@ -12,18 +12,19 @@ datasource db {
 
 model User {
   // Fillable data
-  id         String     @id @default(uuid())
-  name       String
-  email      String     @unique
-  password   String
+  id             String           @id @default(uuid())
+  name           String
+  email          String           @unique
+  password       String
   // Management data
-  status     UserStatus @default(approved)
-  role       UserRole   @default(user)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-  deleted    Boolean    @default(false)
+  status         UserStatus       @default(approved)
+  role           UserRole         @default(user)
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  deleted        Boolean          @default(false)
   // Relationship data
-  sessions   Session[]
+  sessions       Session[]
+  PasswordChange PasswordChange[]
 
   @@map("users")
 }
@@ -44,6 +45,23 @@ model Session {
   @@map("sessions")
 }
 
+model PasswordChange {
+  // Fillable data
+  id                String               @id @default(uuid())
+  token             String
+  old_password      String
+  new_password      String?
+  is_reset_password Boolean              @default(false)
+  expires_at        DateTime             @default(now())
+  // Management data
+  status            PasswordChangeStatus @default(not_executed)
+  created_at        DateTime             @default(now())
+  updated_at        DateTime             @updatedAt
+  // Relationship data
+  user              User                 @relation(fields: [user_id], references: [id])
+  user_id           String
+}
+
 enum UserStatus {
   // pending
   // unapproved
@@ -55,4 +73,9 @@ enum UserRole {
   admin
   editor
   user
+}
+
+enum PasswordChangeStatus {
+  executed
+  not_executed
 }
