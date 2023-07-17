@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,60 +8,51 @@ datasource db {
 }
 
 model User {
-  // Fillable data
   id             String           @id @default(uuid())
   name           String
   email          String           @unique
   password       String
-  // Management data
   status         UserStatus       @default(approved)
   role           UserRole         @default(user)
   created_at     DateTime         @default(now())
   updated_at     DateTime         @updatedAt
   deleted        Boolean          @default(false)
-  // Relationship data
-  sessions       Session[]
   PasswordChange PasswordChange[]
+  sessions       Session[]
 
   @@map("users")
 }
 
 model Session {
-  // Fillable data
   id         String   @id @default(uuid())
   link       String
   expires_at DateTime @default(now())
   user_agent String
-  // Management data
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  // Relationship data
-  user       User     @relation(fields: [user_id], references: [id])
   user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
 
   @@map("sessions")
 }
 
 model PasswordChange {
-  // Fillable data
   id                String               @id @default(uuid())
   token             String
   old_password      String
   new_password      String?
   is_reset_password Boolean              @default(false)
   expires_at        DateTime             @default(now())
-  // Management data
   status            PasswordChangeStatus @default(not_executed)
   created_at        DateTime             @default(now())
   updated_at        DateTime             @updatedAt
-  // Relationship data
-  user              User                 @relation(fields: [user_id], references: [id])
   user_id           String
+  user              User                 @relation(fields: [user_id], references: [id])
+
+  @@map("password_changes")
 }
 
 enum UserStatus {
-  // pending
-  // unapproved
   approved
   restricted
 }
