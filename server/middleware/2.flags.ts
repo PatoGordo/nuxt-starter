@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const path = getRequestPath(event);
 
     const feature = flags.find(
-      (flag) => flag.urls.filter((url) => path.includes(url)).length > 0
+      (flag) => flag.urls.filter((url) => path.includes(url)).length > 0,
     );
 
     const isFeatureActive = await feature?.active();

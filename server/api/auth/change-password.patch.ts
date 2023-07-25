@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
     const isPasswordTheSame = bcrypt.compareSync(
       body.old_password,
-      event.context.user.password
+      event.context.user.password,
     );
 
     if (!isPasswordTheSame) {

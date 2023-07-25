@@ -68,8 +68,6 @@ export default defineEventHandler(async (event) => {
     <a href="${protocol}://${url}/auth/reset-password?token=${token}">Reset password</a>
     `;
 
-    console.log(emailTemplate);
-
     await mailTransporter.sendMail({
       to: body.email,
       from: process.env.MAIL_USERNAME,

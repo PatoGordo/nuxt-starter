@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { prismaClient } from "../../services";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import moment from "moment";
+import { prismaClient } from "../../services";
 import { generateID } from "../../utils/generate-id";
 
 export default defineEventHandler(async (event) => {
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
 
     const passwordIsTheSame = bcrypt.compareSync(
       body.password,
-      userExists.password
+      userExists.password,
     );
 
     if (!passwordIsTheSame) {
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
       String(process.env.BEARER_TOKEN_JWT_SECRET),
       {
         expiresIn: "1h",
-      }
+      },
     );
 
     const refreshToken = jwt.sign(
@@ -61,7 +61,7 @@ export default defineEventHandler(async (event) => {
       String(process.env.REFRESH_TOKEN_JWT_SECRET),
       {
         expiresIn: "3d",
-      }
+      },
     );
 
     await prismaClient.session.create({

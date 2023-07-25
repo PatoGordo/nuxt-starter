@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
 
       const data = jwt.verify(
         token,
-        String(process.env.BEARER_TOKEN_JWT_SECRET)
+        String(process.env.BEARER_TOKEN_JWT_SECRET),
       );
 
       if (typeof data === "string") {

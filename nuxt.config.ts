@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  modules: ["nuxt-security"],
+  modules: ["nuxt-security", "@nuxtjs/eslint-module"],
   devtools: { enabled: true },
   runtimeConfig: {
     public: {

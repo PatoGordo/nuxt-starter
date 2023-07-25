@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
     const data = jwt.verify(
       body.refresh_token,
-      String(process.env.REFRESH_TOKEN_JWT_SECRET)
+      String(process.env.REFRESH_TOKEN_JWT_SECRET),
     );
 
     if (typeof data === "string") {
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
       String(process.env.BEARER_TOKEN_JWT_SECRET),
       {
         expiresIn: "1h",
-      }
+      },
     );
 
     return handleResult({

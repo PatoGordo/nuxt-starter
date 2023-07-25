@@ -6,11 +6,11 @@ export const configCatClient = configcat.getClient(
   configcat.PollingMode.AutoPoll,
   {
     pollIntervalSeconds: 5,
-  }
+  },
 );
 
 export const isActive = async (flag: string) =>
-  configCatClient.getValueAsync(flag, false);
+  await configCatClient.getValueAsync(flag, false);
 
 export interface IFlag {
   feature: string;
