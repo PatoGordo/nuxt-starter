@@ -54,6 +54,14 @@ export default defineEventHandler(async (event) => {
         });
       }
 
+      await prismaClient.session.deleteMany({
+        where: {
+          expires_at: {
+            lte: new Date(),
+          },
+        },
+      });
+
       const user = await prismaClient.user.findFirst({
         where: {
           id: data.user_id,
