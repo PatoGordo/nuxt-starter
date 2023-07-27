@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     });
 
     return handleResult({
-      feature:
+      message:
         "Password changed, successfully reverted! Please login and change your password to stay secure.",
     });
   } catch (error) {
