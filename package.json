@@ -1,0 +1,47 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare && yarn prisma:generate",
+    "prisma:inline": "cp ./node_modules/.prisma/client/*.js ./node_modules/@prisma/client",
+    "prisma:migrate": "prisma migrate deploy && npm run prisma:inline",
+    "prisma:migrate:dev": "prisma migrate dev && npm run prisma:inline",
+    "prisma:generate": "prisma generate && npm run prisma:inline",
+    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "yarn lint:js && yarn lint:prettier",
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^18.16.19",
+    "@types/nodemailer": "^6.4.8",
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "nuxt": "^3.6.2",
+    "nuxt-security": "^0.13.1",
+    "prettier": "^3.0.0",
+    "prisma": "^5.0.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@prisma/client": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "configcat-node": "^10.0.1",
+    "dotenv": "^16.3.1",
+    "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
+    "nodemailer": "^6.9.3",
+    "zod": "^3.21.4"
+  }
+}
