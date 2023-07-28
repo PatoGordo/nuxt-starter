@@ -2,7 +2,7 @@ import { roleGuard } from "../../../guards";
 
 export default defineEventHandler(async (event) => {
   try {
-    roleGuard(event, ["admin", "editor"]);
+    roleGuard(event, ["admin", "editor", "user"]);
 
     const targetUserId = event.context.params?.id;
 
@@ -12,10 +12,14 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    return handleResult({
-      ...user,
-      password: "protected-data",
-    });
+    return handleResult(
+      user
+        ? {
+            ...user,
+            password: "protected-data",
+          }
+        : user,
+    );
   } catch (error) {
     return handleError(event, error);
   }
