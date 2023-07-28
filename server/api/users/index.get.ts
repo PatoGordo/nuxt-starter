@@ -1,8 +1,21 @@
-export default defineEventHandler((event) => {
+import { roleGuard } from "../../guards";
+
+export default defineEventHandler(async (event) => {
   try {
-    return handleResult({
-      ok: true,
+    roleGuard(event, ["admin", "editor"]);
+
+    const user = await prismaClient.user.findMany({
+      where: {
+        id: event.context.user.id,
+      },
     });
+
+    return handleResult(
+      user.map((u) => ({
+        ...u,
+        password: "protected-data",
+      })),
+    );
   } catch (error) {
     return handleError(event, error);
   }
