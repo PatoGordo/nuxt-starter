@@ -58,7 +58,6 @@ export const handleError = (event: H3Event, err: unknown) => {
 
   return {
     message: (err as Error).message,
-    error: err as Error,
     timestamp: new Date(),
     path: getRequestPath(event),
     handled: false,
