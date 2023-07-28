@@ -21,12 +21,21 @@ export default defineEventHandler(async (event) => {
     const userExists = await prismaClient.user.findFirst({
       where: {
         email: body.email,
+        deleted: false,
       },
     });
 
     if (!userExists) {
       throw new HTTPException({
         message: "Email or Password is incorrect!",
+      });
+    }
+
+    if (userExists.status !== "approved") {
+      throw new HTTPException({
+        message:
+          "Your account is currently restricted! Contact the support to know the reason",
+        status_code: 403,
       });
     }
 

@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
     const user = await prismaClient.user.findFirst({
       where: {
         email: body.email,
+        deleted: false,
+        status: "approved",
       },
       select: {
         id: true,

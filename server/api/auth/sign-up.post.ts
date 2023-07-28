@@ -77,6 +77,8 @@ export default defineEventHandler(async (event) => {
       },
     });
 
+    setResponseStatus(event, 201);
+
     return handleResult({
       token: bearerToken,
       refresh_token: refreshToken,
