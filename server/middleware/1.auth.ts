@@ -65,6 +65,7 @@ export default defineEventHandler(async (event) => {
       const user = await prismaClient.user.findFirst({
         where: {
           id: data.user_id,
+          deleted: false,
           sessions: {
             some: {
               link: data.link,
@@ -80,10 +81,10 @@ export default defineEventHandler(async (event) => {
         });
       }
 
-      if (user?.status === "restricted") {
+      if (user?.status !== "approved") {
         throw new HTTPException({
           message:
-            "Your user was restricted! You cannot do this action or any other!",
+            "Your account is currently restricted! Contact the support to know the reason",
           status_code: 403,
         });
       }
