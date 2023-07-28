@@ -2,8 +2,8 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import { prismaClient } from "../../services";
-import { generateID } from "../../utils/generate-id";
+import { prismaClient } from "../../../services";
+import { generateID } from "../../../utils/generate-id";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
 
     const validation = z
       .object({
+        name: z.string().min(1),
         email: z.string().email(),
         password: z.string().min(8).max(255),
       })
@@ -18,43 +19,33 @@ export default defineEventHandler(async (event) => {
 
     validation.parse(body);
 
-    const userExists = await prismaClient.user.findFirst({
+    const emailAlreadyExists = await prismaClient.user.findFirst({
       where: {
         email: body.email,
-        deleted: false,
       },
     });
 
-    if (!userExists) {
+    if (emailAlreadyExists) {
       throw new HTTPException({
-        message: "Email or Password is incorrect!",
+        message: "Email already in use! Use another or login with this one.",
       });
     }
 
-    if (userExists.status !== "approved") {
-      throw new HTTPException({
-        message:
-          "Your account is currently restricted! Contact the support to know the reason",
-        status_code: 403,
-      });
-    }
+    const passwordHash = bcrypt.hashSync(body.password, 12);
 
-    const passwordIsTheSame = bcrypt.compareSync(
-      body.password,
-      userExists.password,
-    );
-
-    if (!passwordIsTheSame) {
-      throw new HTTPException({
-        message: "Email or Password is incorrect!",
-      });
-    }
+    const user = await prismaClient.user.create({
+      data: {
+        name: body.name,
+        email: body.email,
+        password: passwordHash,
+      },
+    });
 
     const link = generateID(24);
 
     const bearerToken = jwt.sign(
       {
-        user_id: userExists.id,
+        user_id: user.id,
         link,
       },
       String(process.env.BEARER_TOKEN_JWT_SECRET),
@@ -79,21 +70,20 @@ export default defineEventHandler(async (event) => {
         user_agent: getRequestHeader(event, "User-Agent") || "N/A",
         user: {
           connect: {
-            id: userExists.id,
+            id: user.id,
           },
         },
         expires_at: moment().add(3, "d").toDate(),
       },
-      select: {
-        id: true,
-      },
     });
+
+    setResponseStatus(event, 201);
 
     return handleResult({
       token: bearerToken,
       refresh_token: refreshToken,
       user: {
-        ...userExists,
+        ...user,
         password: "protected-data",
       },
     });

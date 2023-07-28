@@ -1,4 +1,4 @@
-import { roleGuard } from "../../guards";
+import { roleGuard } from "../../../guards";
 
 export default defineEventHandler(async (event) => {
   try {
