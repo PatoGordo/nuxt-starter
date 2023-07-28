@@ -6,16 +6,17 @@ export default defineEventHandler(async (event) => {
       (flag) => flag.urls.filter((url) => path.includes(url)).length > 0,
     );
 
-    const isFeatureActive = await feature?.active();
+    if (path.includes("/api") && feature) {
+      const isFeatureActive = await feature?.active();
 
-    if (!isFeatureActive) {
-      throw new HTTPException({
-        error: "Feature Flag Error",
-        message:
-          feature?.message ||
-          `The "${feature?.feature}" feature is not available now! We are working on it.`,
-        status_code: 400,
-      });
+      if (!isFeatureActive) {
+        throw new HTTPException({
+          message:
+            feature?.message ||
+            `The "${feature?.feature}" feature is not available now! We are working on it.`,
+          status_code: 503,
+        });
+      }
     }
   } catch (error) {
     return handleError(event, error);
