@@ -1,4 +1,5 @@
 import { H3Event } from "h3";
+import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 
 export const handleError = (event: H3Event, err: unknown) => {
@@ -23,6 +24,30 @@ export const handleError = (event: H3Event, err: unknown) => {
     return {
       message: errors[0].message,
       status_code: 400,
+      timestamp: new Date(),
+      path: getRequestPath(event),
+      handled: true,
+    };
+  }
+
+  if (err instanceof jwt.TokenExpiredError) {
+    setResponseStatus(event, 401);
+
+    return {
+      message: "Your session has expired. Please login, and try again",
+      status_code: 401,
+      timestamp: new Date(),
+      path: getRequestPath(event),
+      handled: true,
+    };
+  }
+
+  if (err instanceof jwt.JsonWebTokenError) {
+    setResponseStatus(event, 401);
+
+    return {
+      message: `JWT Error: "${err.message}"`,
+      status_code: 401,
       timestamp: new Date(),
       path: getRequestPath(event),
       handled: true,
