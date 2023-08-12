@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   try {
     const path = getRequestPath(event);
 
-    if (path.includes("/api")) {
+    if (path.includes("/api/")) {
       const pathIsExcluded =
         excludePaths.filter((v) => path.includes(v)).length >= 1;
       const pathIsForceIncluded =
