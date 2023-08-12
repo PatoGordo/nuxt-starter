@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
       (flag) => flag.urls.filter((url) => path.includes(url)).length > 0,
     );
 
-    if (path.includes("/api") && feature) {
+    if (path.includes("/api/") && feature) {
       const isFeatureActive = await feature?.active();
 
       if (!isFeatureActive) {
