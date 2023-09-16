@@ -1,5 +1,6 @@
 <template>
   <div>
-    <h1>Hello World</h1>
+    <h2>Home page</h2>
+    <button class="btn">Hello daisyUI</button>
   </div>
 </template>
