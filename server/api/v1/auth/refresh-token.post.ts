@@ -1,5 +1,6 @@
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import { authConfig } from "~/config/auth";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -62,7 +63,7 @@ export default defineEventHandler(async (event) => {
       },
       String(process.env.BEARER_TOKEN_JWT_SECRET),
       {
-        expiresIn: "1h",
+        expiresIn: authConfig.sessionDuration / 1000,
       },
     );
 

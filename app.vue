@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import { useAuthStore } from "./store/auth";
+
+const authStore = useAuthStore();
+
+onBeforeMount(() => {
+  authStore.updateServicesInfo();
+});
+
 useHead({
   link: [
     {

@@ -2,7 +2,9 @@
 
 <template>
   <div class="w-full h-full">
-    <navigation-navbar />
-    <slot />
+    <navigation-navbar>
+      <slot></slot>
+    </navigation-navbar>
+    <loading />
   </div>
 </template>

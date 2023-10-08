@@ -1,47 +1,90 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { navigation } from "~/navigation/navigation";
+
+const handleCloseModal = () => {
+  const myDrawer = document.querySelector<HTMLInputElement>("#my-drawer");
+
+  if (myDrawer?.checked) {
+    myDrawer?.click();
+  }
+};
+</script>
 
 <template>
-  <nav class="navbar bg-base-200">
-    <div class="navbar-start">
-      <div class="dropdown">
-        <label tabindex="0" class="btn btn-ghost btn-sm lg:hidden">
-          <Icon name="tabler:menu-2" size="24px" />
-        </label>
-        <ul
-          tabindex="0"
-          class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          <li><a>Item 1</a></li>
-          <li>
-            <a>Parent</a>
-            <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
-            </ul>
-          </li>
-          <li><a>Item 3</a></li>
-        </ul>
+  <div class="drawer">
+    <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content">
+      <div class="flex flex-col items items-start justify-start w-full h-full">
+        <div class="navbar bg-base-200 z-30">
+          <div class="flex-1">
+            <nuxt-link to="/" class="btn btn-ghost normal-case text-xl">
+              MyApp
+            </nuxt-link>
+          </div>
+          <div class="flex-none sm:hidden">
+            <label class="btn btn-square btn-ghost" for="my-drawer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                class="inline-block w-5 h-5 stroke-current"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                ></path>
+              </svg>
+            </label>
+          </div>
+
+          <div
+            class="sm:flex hidden flex-row items-center justify-end gap-4 mr-4"
+          >
+            <template v-for="(item, index) in navigation" :key="index">
+              <navigation-nav-item
+                :title="item.title"
+                :path="item.path"
+                :variant="item?.variant"
+                :extra="item?.extra"
+                @click="
+                  () => {
+                    item?.onClick ? item.onClick() : null;
+                    handleCloseModal();
+                  }
+                "
+              ></navigation-nav-item>
+            </template>
+          </div>
+        </div>
+
+        <slot />
       </div>
-      <a class="btn btn-ghost btn-sm normal-case text-xl">daisyUI</a>
     </div>
-    <div class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal px-1">
-        <li><a>Item 1</a></li>
-        <li tabindex="0">
-          <details>
-            <summary>Parent</summary>
-            <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
-            </ul>
-          </details>
-        </li>
-        <li><a>Item 3</a></li>
+
+    <div class="drawer-side">
+      <label for="my-drawer" class="drawer-overlay"></label>
+      <ul
+        class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content gap-4 h-full"
+      >
+        <nuxt-link
+          to="/"
+          class="font-bold mb-4 normal-case text-xl text-center whitespace-pre-wrap"
+        >
+          MyApp
+        </nuxt-link>
+
+        <template v-for="(item, index) in navigation" :key="index">
+          <navigation-nav-item
+            :title="item.title"
+            :path="item.path"
+            :variant="item?.variant"
+            :extra="item?.extra"
+            @click="handleCloseModal"
+          ></navigation-nav-item>
+        </template>
       </ul>
     </div>
-    <div class="navbar-end">
-      <a class="btn btn-sm btn-primary">Login</a>
-      <a class="btn btn-sm btn-secondary">Register</a>
-    </div>
-  </nav>
+  </div>
 </template>
