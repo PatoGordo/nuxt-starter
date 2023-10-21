@@ -1,0 +1,7 @@
+.page-container {
+  @apply flex flex-col items-start justify-center gap-4 p-4;
+
+  .page-title {
+    @apply text-xl font-semibold mb-4;
+  }
+}

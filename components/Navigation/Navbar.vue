@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { navigation } from "~/navigation/navigation";
 
-const handleCloseModal = () => {
-  const myDrawer = document.querySelector<HTMLInputElement>("#my-drawer");
+const route = useRoute();
+const opened = ref(false);
 
-  if (myDrawer?.checked) {
-    myDrawer?.click();
-  }
+const handleCloseModal = () => {
+  opened.value = false;
 };
+
+watch(
+  () => route.path,
+  () => {
+    handleCloseModal();
+  },
+);
 </script>
 
 <template>
   <div class="drawer">
-    <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+    <input
+      id="my-drawer"
+      v-model="opened"
+      type="checkbox"
+      class="drawer-toggle"
+    />
     <div class="drawer-content">
       <div class="flex flex-col items items-start justify-start w-full h-full">
         <div class="navbar bg-base-200 z-30">
@@ -22,25 +33,14 @@ const handleCloseModal = () => {
             </nuxt-link>
           </div>
           <div class="flex-none sm:hidden">
-            <label class="btn btn-square btn-ghost" for="my-drawer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                class="inline-block w-5 h-5 stroke-current"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                ></path>
-              </svg>
+            <label class="btn btn-square btn-ghost" @click="opened = !opened">
+              <icon name="tabler:menu-2" size="24" />
             </label>
           </div>
 
-          <div
+          <label
             class="sm:flex hidden flex-row items-center justify-end gap-4 mr-4"
+            @click.stop="handleCloseModal"
           >
             <template v-for="(item, index) in navigation" :key="index">
               <navigation-nav-item
@@ -56,7 +56,7 @@ const handleCloseModal = () => {
                 "
               ></navigation-nav-item>
             </template>
-          </div>
+          </label>
         </div>
 
         <slot />
@@ -86,5 +86,8 @@ const handleCloseModal = () => {
         </template>
       </ul>
     </div>
+
+    <!-- Pre loading elements -->
+    <button class="btn btn-error hidden"></button>
   </div>
 </template>

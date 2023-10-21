@@ -1,3 +1,4 @@
+import moment from "moment";
 import { z } from "zod";
 
 export default defineEventHandler(async (event) => {
@@ -17,6 +18,13 @@ export default defineEventHandler(async (event) => {
         token: body.token,
       },
     });
+
+    if (moment().diff(moment(passwordChange?.created_at), "days") > 7) {
+      throw new HTTPException({
+        message:
+          "This revert password change link expired! Please reset your password manually.",
+      });
+    }
 
     await prismaClient.user.update({
       where: {

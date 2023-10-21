@@ -6,6 +6,7 @@ import {
 import { api } from "~/services/api";
 import { useAuthStore } from "~/store/auth";
 import { useLoading } from "~/store/loading";
+import { UserRole } from "~/types/entities/auth/user";
 
 export const navigation: NavigationItem[] = [
   {
@@ -17,6 +18,14 @@ export const navigation: NavigationItem[] = [
     path: "/dashboard",
     extra: {
       onlyLoggedIn: true,
+    },
+  },
+  {
+    title: "Admin",
+    path: "/dashboard/admin",
+    extra: {
+      onlyLoggedIn: true,
+      onlyUserWithRole: [UserRole.admin],
     },
   },
   {
@@ -78,8 +87,10 @@ export const navigation: NavigationItem[] = [
         await api.post("/v1/auth/sign-out");
 
         authStore.signOut();
+
         router.push("/auth/sign-in");
       } catch (error) {
+        authStore.signOut();
       } finally {
         end();
       }

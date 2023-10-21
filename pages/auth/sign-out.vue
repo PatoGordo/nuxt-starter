@@ -16,6 +16,7 @@ const handleSignOut = async () => {
     authStore.signOut();
     router.push("/");
   } catch (error) {
+    authStore.signOut();
   } finally {
     end();
   }
@@ -27,7 +28,9 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div>
-    <h2>Sign Out</h2>
-  </div>
+  <navigation-auth-page>
+    <div>
+      <h2>Sign Out</h2>
+    </div>
+  </navigation-auth-page>
 </template>

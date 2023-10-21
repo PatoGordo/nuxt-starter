@@ -11,12 +11,12 @@ export interface User {
 }
 
 export enum UserRole {
-  admin,
-  editor,
-  user,
+  admin = "admin",
+  editor = "editor",
+  user = "user",
 }
 
 export enum UserStatus {
-  approved,
-  restricted,
+  approved = "approved",
+  restricted = "restricted",
 }

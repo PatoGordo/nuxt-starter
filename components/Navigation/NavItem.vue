@@ -2,11 +2,12 @@
 import { useAuthStore } from "~/store/auth";
 import { NavigationItem } from "~/types/components/navigation";
 
+const route = useRoute();
 const authStore = useAuthStore();
 
 const props = defineProps<NavigationItem>();
 
-const variantLink = "link w-full flex items-center justify-center";
+const variantLink = `link w-full flex items-center justify-center`;
 const variantPrimaryButton =
   "btn btn-outline btn-primary btn-sm max-sm:flex max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:w-full max-sm:content-center max-sm:text-center";
 const variantSecondaryButton =
@@ -40,7 +41,7 @@ const handleShouldShownItem = () => {
   if (
     props.extra?.onlyUserWithRole &&
     (!authStore.user?.role ||
-      props.extra?.onlyUserWithRole.includes(authStore.user?.role))
+      !props.extra?.onlyUserWithRole.includes(authStore.user?.role))
   ) {
     return false;
   }
@@ -68,6 +69,7 @@ const handleShouldShownItem = () => {
         handleGetStyle(),
         props?.extra?.className,
         props?.path ? '' : '!hidden',
+        route.path === props.path ? 'text-accent' : '',
       ]"
     >
       {{ props.title }}

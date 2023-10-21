@@ -1,6 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import Swal from "sweetalert2";
-import { useLoading } from "~/store/loading";
 
 export const api = axios.create({
   baseURL: "/api",
@@ -8,21 +6,20 @@ export const api = axios.create({
 
 api.interceptors.response.use(
   (res) => Promise.resolve(res),
-  async (res) => {
-    const loading = useLoading();
+  (res) => {
+    const router = useRouter();
 
-    const { data } = res.response as AxiosResponse;
+    const response = res.response as AxiosResponse;
 
-    loading.end();
+    if (response?.status === 403) {
+      router.push("/403");
+      throw new Error("<<ignore>>");
+    }
 
-    await Swal.fire({
-      title: "An unexpected error has occured",
-      text: data.message,
-      icon: "error",
-      showConfirmButton: false,
-      showCancelButton: true,
-      cancelButtonText: "Confirm",
-    });
+    if (response?.status === 503) {
+      router.push("/503");
+      throw new Error("<<ignore>>");
+    }
 
     return Promise.reject(res);
   },
