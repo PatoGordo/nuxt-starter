@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { ErrorCodes } from "~/constants/error-codes";
 
 export const excludePaths = [
   // Add below all the routes that should be excluded from auth middleware
@@ -13,7 +14,7 @@ export const forceIncludePaths = [
 
 export default defineEventHandler(async (event) => {
   try {
-    const path = getRequestPath(event);
+    const path = event.path;
 
     if (path.includes("/api/")) {
       const pathIsExcluded =
@@ -31,6 +32,7 @@ export default defineEventHandler(async (event) => {
           throw new HTTPException({
             message: "You should to be loggedin to do this action!",
             status_code: 401,
+            error_code: ErrorCodes.SESSION_EXPIRED,
           });
         }
 
@@ -40,6 +42,7 @@ export default defineEventHandler(async (event) => {
           throw new HTTPException({
             message: "You should to be loggedin to do this action!",
             status_code: 401,
+            error_code: ErrorCodes.SESSION_EXPIRED,
           });
         }
 
@@ -52,6 +55,7 @@ export default defineEventHandler(async (event) => {
           throw new HTTPException({
             message: "Your session has an invalid signature!",
             status_code: 401,
+            error_code: ErrorCodes.SESSION_EXPIRED,
           });
         }
 
@@ -79,6 +83,7 @@ export default defineEventHandler(async (event) => {
           throw new HTTPException({
             message: "Your session was expired! Try to login again.",
             status_code: 401,
+            error_code: ErrorCodes.SESSION_EXPIRED,
           });
         }
 

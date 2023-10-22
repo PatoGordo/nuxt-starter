@@ -2,7 +2,7 @@ import { H3Event } from "h3";
 import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 import { logger } from "../services/logger/logger";
-
+import { ErrorCodes } from "~/constants/error-codes";
 export const handleError = (event: H3Event, err: unknown) => {
   logger.log("** SERVER ERROR **", {
     message: (err as Error).message,
@@ -44,6 +44,7 @@ export const handleError = (event: H3Event, err: unknown) => {
     return {
       message: "Your session has expired. Please login, and try again",
       status_code: 401,
+      error_code: ErrorCodes.SESSION_EXPIRED,
       timestamp: new Date(),
       path: event.path,
       handled: true,
@@ -56,6 +57,7 @@ export const handleError = (event: H3Event, err: unknown) => {
     return {
       message: `JWT Error: "${err.message}"`,
       status_code: 401,
+      error_code: ErrorCodes.SESSION_EXPIRED,
       timestamp: new Date(),
       path: event.path,
       handled: true,
@@ -69,6 +71,8 @@ export const handleError = (event: H3Event, err: unknown) => {
   return {
     message:
       "We're sorry, an unexpected internal error has occurred. Our team has been notified and is actively investigating.",
+    status_code: 500,
+    error_code: ErrorCodes.INTERNAL_SERVER_ERROR,
     timestamp: new Date(),
     path: event.path,
     handled: false,

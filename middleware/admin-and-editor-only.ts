@@ -11,6 +11,11 @@ export default defineNuxtRouteMiddleware(() => {
     moment(authStore.sessionExpiresAt).isBefore(moment.now()) ||
     !authStore?.user?.role
   ) {
+    if (moment().isBefore(authStore.refreshTokenExpiresAt)) {
+      authStore.handleRefreshToken();
+      return;
+    }
+
     authStore.signOut();
     return router.push("/auth/sign-in");
   }

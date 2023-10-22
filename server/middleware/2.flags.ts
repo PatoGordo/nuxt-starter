@@ -1,6 +1,8 @@
+import { ErrorCodes } from "~/constants/error-codes";
+
 export default defineEventHandler(async (event) => {
   try {
-    const path = getRequestPath(event);
+    const path = event.path;
 
     const feature = flags.find(
       (flag) => flag.urls.filter((url) => path.includes(url)).length > 0,
@@ -14,6 +16,7 @@ export default defineEventHandler(async (event) => {
           message:
             feature?.message ||
             `The "${feature?.feature}" feature is not available now! We are working on it.`,
+          error_code: ErrorCodes.FEATURE_FLAG_ENABLE,
           status_code: 503,
         });
       }
