@@ -1,6 +1,7 @@
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import moment from "moment";
+import { appConfig } from "~/config/app";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -88,7 +89,7 @@ export default defineEventHandler(async (event) => {
     await mailTransporter.sendMail({
       to: event.context.user.email,
       from: process.env.MAIL_USERNAME,
-      subject: `${process.env.APP_NAME} - Your password has been changed!`,
+      subject: `${appConfig.appName} - Your password has been changed!`,
       html: emailTemplate,
       priority: "high",
     });

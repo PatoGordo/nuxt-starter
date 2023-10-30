@@ -1,5 +1,7 @@
 import { z } from "zod";
 import jwt from "jsonwebtoken";
+import { authConfig } from "~/config/auth";
+import { ErrorCodes } from "~/constants/error-codes";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -22,6 +24,7 @@ export default defineEventHandler(async (event) => {
       throw new HTTPException({
         message: "Your session has an invalid signature!",
         status_code: 401,
+        error_code: ErrorCodes.SESSION_EXPIRED,
       });
     }
 
@@ -52,6 +55,7 @@ export default defineEventHandler(async (event) => {
       throw new HTTPException({
         message: "Your session was expired! Try to login again.",
         status_code: 401,
+        error_code: ErrorCodes.SESSION_EXPIRED,
       });
     }
 
@@ -62,7 +66,7 @@ export default defineEventHandler(async (event) => {
       },
       String(process.env.BEARER_TOKEN_JWT_SECRET),
       {
-        expiresIn: "1h",
+        expiresIn: authConfig.sessionDuration / 1000,
       },
     );
 

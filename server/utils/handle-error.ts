@@ -1,14 +1,22 @@
 import { H3Event } from "h3";
 import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
-
+import { logger } from "../services/logger/logger";
+import { ErrorCodes } from "~/constants/error-codes";
 export const handleError = (event: H3Event, err: unknown) => {
+  logger.log("** SERVER ERROR **", {
+    message: (err as Error).message,
+    timestamp: new Date(),
+    path: event.path,
+    handled: false,
+  });
+
   if (err instanceof HTTPException) {
     setResponseStatus(event, err.status_code || 400);
 
     return {
       ...err,
-      path: getRequestPath(event),
+      path: event.path,
       handled: true,
     };
   }
@@ -25,7 +33,7 @@ export const handleError = (event: H3Event, err: unknown) => {
       message: errors[0].message,
       status_code: 400,
       timestamp: new Date(),
-      path: getRequestPath(event),
+      path: event.path,
       handled: true,
     };
   }
@@ -36,8 +44,9 @@ export const handleError = (event: H3Event, err: unknown) => {
     return {
       message: "Your session has expired. Please login, and try again",
       status_code: 401,
+      error_code: ErrorCodes.SESSION_EXPIRED,
       timestamp: new Date(),
-      path: getRequestPath(event),
+      path: event.path,
       handled: true,
     };
   }
@@ -48,18 +57,24 @@ export const handleError = (event: H3Event, err: unknown) => {
     return {
       message: `JWT Error: "${err.message}"`,
       status_code: 401,
+      error_code: ErrorCodes.SESSION_EXPIRED,
       timestamp: new Date(),
-      path: getRequestPath(event),
+      path: event.path,
       handled: true,
     };
   }
 
-  setResponseStatus(event, 400);
+  setResponseStatus(event, 500);
+
+  // TODO: collect logs and implements the logic to notify using email this error
 
   return {
-    message: (err as Error).message,
+    message:
+      "We're sorry, an unexpected internal error has occurred. Our team has been notified and is actively investigating.",
+    status_code: 500,
+    error_code: ErrorCodes.INTERNAL_SERVER_ERROR,
     timestamp: new Date(),
-    path: getRequestPath(event),
+    path: event.path,
     handled: false,
   };
 };

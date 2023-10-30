@@ -1,5 +1,6 @@
 import moment from "moment";
 import { z } from "zod";
+import { appConfig } from "~/config/app";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -73,7 +74,7 @@ export default defineEventHandler(async (event) => {
     await mailTransporter.sendMail({
       to: body.email,
       from: process.env.MAIL_USERNAME,
-      subject: `${process.env.APP_NAME} - Reset password`,
+      subject: `${appConfig.appName} - Reset password`,
       html: emailTemplate,
     });
 

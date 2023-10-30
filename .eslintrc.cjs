@@ -16,5 +16,6 @@ module.exports = {
     "import/default": "off",
     "import/no-named-as-default-member": "off",
     "no-use-before-define": "off",
+    "vue/multi-word-component-names": "off",
   },
 };

@@ -1,6 +1,13 @@
 export default defineNuxtConfig({
-  modules: ["nuxt-security", "@nuxtjs/eslint-module"],
-  devtools: { enabled: true },
+  modules: [
+    "nuxt-security",
+    "@nuxtjs/eslint-module",
+    "@nuxtjs/tailwindcss",
+    "@vueuse/nuxt",
+    "nuxt-icon",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+  ],
   runtimeConfig: {
     public: {
       CONFIG_CAT_SDK_KEY: process.env.CONFIG_CAT_SDK_KEY,
@@ -16,6 +23,12 @@ export default defineNuxtConfig({
     headers: {
       xXSSProtection: "1",
       contentSecurityPolicy: false,
+    },
+  },
+  nitro: {
+    preset: "netlify",
+    experimental: {
+      openAPI: true,
     },
   },
 });

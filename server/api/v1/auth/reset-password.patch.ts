@@ -48,6 +48,13 @@ export default defineEventHandler(async (event) => {
           },
         },
       },
+      select: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
     });
 
     return handleResult({

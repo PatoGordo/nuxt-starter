@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import moment from "moment";
 import { prismaClient } from "../../../services";
 import { generateID } from "../../../utils/generate-id";
+import { authConfig } from "~/config/auth";
 
 export default defineEventHandler(async (event) => {
   try {
@@ -50,7 +51,7 @@ export default defineEventHandler(async (event) => {
       },
       String(process.env.BEARER_TOKEN_JWT_SECRET),
       {
-        expiresIn: "1h",
+        expiresIn: authConfig.sessionDuration / 1000,
       },
     );
 
@@ -60,7 +61,7 @@ export default defineEventHandler(async (event) => {
       },
       String(process.env.REFRESH_TOKEN_JWT_SECRET),
       {
-        expiresIn: "3d",
+        expiresIn: authConfig.refreshTokenDuration / 1000,
       },
     );
 
