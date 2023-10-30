@@ -25,4 +25,9 @@ export default defineNuxtConfig({
       contentSecurityPolicy: false,
     },
   },
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+  },
 });

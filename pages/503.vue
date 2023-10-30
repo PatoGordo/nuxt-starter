@@ -17,7 +17,7 @@ definePageMeta({
       Service Unavailable
     </h2>
     <p class="text-md font-medium mb-8 text-center">
-      This feature isn't available now! We are working on it.
+      This feature isn't available right now! We are working on it.
     </p>
 
     <svg

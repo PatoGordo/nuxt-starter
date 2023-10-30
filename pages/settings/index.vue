@@ -2,6 +2,6 @@
 
 <template>
   <div class="page-container">
-    <h2 class="page-title">Dashboard</h2>
+    <h2 class="page-title">Settings</h2>
   </div>
 </template>

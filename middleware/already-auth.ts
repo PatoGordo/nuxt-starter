@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware(() => {
   const router = useRouter();
 
   if (authStore.token && moment(authStore.sessionExpiresAt).isAfter(moment())) {
-    return router.push("/");
+    return router.push("/dashboard");
   }
 });

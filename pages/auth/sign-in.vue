@@ -33,7 +33,7 @@ const handleSubmit = async () => {
     });
 
     if (result.user.role === "admin" || result.user.role === "editor") {
-      return router.push("/dashboard/admin");
+      return router.push("/admin");
     }
 
     router.push("/dashboard");

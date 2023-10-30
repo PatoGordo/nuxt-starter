@@ -1,93 +1,96 @@
 <script setup lang="ts">
-import { navigation } from "~/navigation/navigation";
+import Swal from "sweetalert2";
+import { api } from "~/services/api";
+import { useAuthStore } from "~/store/auth";
+import { useLoading } from "~/store/loading";
 
-const route = useRoute();
-const opened = ref(false);
+const props = defineProps<NavbarProps>();
 
-const handleCloseModal = () => {
-  opened.value = false;
+const authStore = useAuthStore();
+const { start, end } = useLoading();
+const router = useRouter();
+
+const handleSignOut = async () => {
+  const answer = await Swal.fire({
+    title: "Are you sure?",
+    text: "Do you want to sign out?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, sign out!",
+    cancelButtonText: "No, stay signed in",
+  });
+
+  if (!answer.isConfirmed) {
+    return;
+  }
+
+  try {
+    start("Finishing session...");
+
+    await api.post("/v1/auth/sign-out");
+
+    authStore.signOut();
+
+    router.push("/auth/sign-in");
+  } catch (error) {
+    authStore.signOut();
+  } finally {
+    end();
+  }
 };
 
-watch(
-  () => route.path,
-  () => {
-    handleCloseModal();
-  },
-);
+interface NavbarProps {
+  toggleDrawerOpen: () => void;
+}
 </script>
 
 <template>
-  <div class="drawer">
-    <input
-      id="my-drawer"
-      v-model="opened"
-      type="checkbox"
-      class="drawer-toggle"
-    />
-    <div class="drawer-content">
-      <div class="flex flex-col items items-start justify-start w-full h-full">
-        <div class="navbar bg-base-200 z-30">
-          <div class="flex-1">
-            <nuxt-link to="/" class="btn btn-ghost normal-case text-xl">
-              MyApp
-            </nuxt-link>
-          </div>
-          <div class="flex-none sm:hidden">
-            <label class="btn btn-square btn-ghost" @click="opened = !opened">
-              <icon name="tabler:menu-2" size="24" />
-            </label>
-          </div>
-
-          <label
-            class="sm:flex hidden flex-row items-center justify-end gap-4 mr-4"
-            @click.stop="handleCloseModal"
-          >
-            <template v-for="(item, index) in navigation" :key="index">
-              <navigation-nav-item
-                :title="item.title"
-                :path="item.path"
-                :variant="item?.variant"
-                :extra="item?.extra"
-                @click="
-                  () => {
-                    item?.onClick ? item.onClick() : null;
-                    handleCloseModal();
-                  }
-                "
-              ></navigation-nav-item>
-            </template>
-          </label>
-        </div>
-
-        <slot />
-      </div>
+  <div
+    class="flex flex-row items-center justify-between h-[65px] w-full bg-base-300 p-4 gap-4"
+  >
+    <div class="lg:hidden">
+      <button class="btn btn-circle" @click="props.toggleDrawerOpen">
+        <icon name="tabler:menu-2" size="24" />
+      </button>
     </div>
 
-    <div class="drawer-side">
-      <label for="my-drawer" class="drawer-overlay"></label>
-      <ul
-        class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content gap-4 h-full"
+    <div class="flex flex-row items-center gap-4 max-lg:hidden">
+      <label
+        for="navbar-search-input"
+        class="cursor-pointer btn bg-base-100 btn-circle"
       >
-        <nuxt-link
-          to="/"
-          class="font-bold mb-4 normal-case text-xl text-center whitespace-pre-wrap"
-        >
-          MyApp
-        </nuxt-link>
-
-        <template v-for="(item, index) in navigation" :key="index">
-          <navigation-nav-item
-            :title="item.title"
-            :path="item.path"
-            :variant="item?.variant"
-            :extra="item?.extra"
-            @click="handleCloseModal"
-          ></navigation-nav-item>
-        </template>
-      </ul>
+        <icon name="tabler:search" size="24" />
+      </label>
+      <input
+        id="navbar-search-input"
+        type="text"
+        class="input input-md w-[360px]"
+        placeholder="Seach..."
+      />
     </div>
 
-    <!-- Pre loading elements -->
-    <button class="btn btn-error hidden"></button>
+    <div class="flex flex-row items-center justify-end gap-4">
+      <button class="btn btn-circle">
+        <icon name="tabler:moon" size="20" />
+      </button>
+
+      <button class="btn btn-circle">
+        <icon name="tabler:bell" size="20" />
+      </button>
+
+      <div class="dropdown dropdown-left dropdown-bottom">
+        <label tabindex="0" class="flex items-center justify-center">
+          <nuxt-link to="/profile" class="btn btn-circle btn-neutral">
+            <img src="/images/user-profile-picture.webp" class="rounded-full" />
+          </nuxt-link>
+        </label>
+      </div>
+
+      <button class="btn btn-error btn-circle" @click="handleSignOut">
+        <icon name="tabler:login-2" size="24" />
+      </button>
+    </div>
   </div>
 </template>

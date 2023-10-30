@@ -1,6 +1,6 @@
 import ms from "ms";
 
 export const authConfig = {
-  sessionDuration: ms("10s"),
-  refreshTokenDuration: ms("30s"),
+  sessionDuration: ms("1h"),
+  refreshTokenDuration: ms("7d"),
 };
