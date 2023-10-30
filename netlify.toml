@@ -1,0 +1,4 @@
+[functions.server]
+  included_files = [
+    "./node_modules/@resvg/resvg-js-linux-x64-gnu/**/*"
+  ]
