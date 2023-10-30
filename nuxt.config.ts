@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   modules: [
-    // "nuxt-security",
+    "nuxt-security",
     "@nuxtjs/eslint-module",
     "@nuxtjs/tailwindcss",
     "@vueuse/nuxt",
@@ -13,21 +13,22 @@ export default defineNuxtConfig({
       CONFIG_CAT_SDK_KEY: process.env.CONFIG_CAT_SDK_KEY,
     },
   },
-  // security: {
-  //   corsHandler: {
-  //     origin: "*",
-  //     methods: "*",
-  //     allowHeaders: "*",
-  //     exposeHeaders: "*",
-  //   },
-  //   headers: {
-  //     xXSSProtection: "1",
-  //     contentSecurityPolicy: false,
-  //   },
-  // },
-  // nitro: {
-  //   experimental: {
-  //     openAPI: true,
-  //   },
-  // },
+  security: {
+    corsHandler: {
+      origin: "*",
+      methods: "*",
+      allowHeaders: "*",
+      exposeHeaders: "*",
+    },
+    headers: {
+      xXSSProtection: "1",
+      contentSecurityPolicy: false,
+    },
+  },
+  nitro: {
+    preset: "netlify",
+    experimental: {
+      openAPI: true,
+    },
+  },
 });
