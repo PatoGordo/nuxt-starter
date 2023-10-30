@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    preset: "netlify",
     experimental: {
       openAPI: true,
     },
