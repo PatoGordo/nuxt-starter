@@ -4,6 +4,7 @@ import { api } from "~/services/api";
 import { useAuthStore } from "~/store/auth";
 import { useLoading } from "~/store/loading";
 
+const colorMode = useColorMode();
 const props = defineProps<NavbarProps>();
 
 const authStore = useAuthStore();
@@ -41,6 +42,14 @@ const handleSignOut = async () => {
   }
 };
 
+const handleToggleTheme = () => {
+  if (colorMode.preference === "dark") {
+    colorMode.preference = "light";
+  } else {
+    colorMode.preference = "dark";
+  }
+};
+
 interface NavbarProps {
   toggleDrawerOpen: () => void;
 }
@@ -72,8 +81,13 @@ interface NavbarProps {
     </div>
 
     <div class="flex flex-row items-center justify-end gap-4">
-      <button class="btn btn-circle">
-        <icon name="tabler:moon" size="20" />
+      <button class="btn btn-circle" @click="handleToggleTheme">
+        <template v-if="colorMode.preference === 'light'">
+          <icon name="tabler:moon" size="20" />
+        </template>
+        <template v-else>
+          <icon name="tabler:sun" size="20" />
+        </template>
       </button>
 
       <button class="btn btn-circle">

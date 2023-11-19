@@ -1,10 +1,12 @@
 <script setup lang="ts">
+// import "@sweetalert2/theme-dark/dark.css";
 import { useAuthStore } from "./store/auth";
 
 const authStore = useAuthStore();
 
 onBeforeMount(() => {
   authStore.updateServicesInfo();
+  authStore.updateUserData();
 });
 
 useHead({

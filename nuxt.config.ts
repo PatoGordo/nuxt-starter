@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
   modules: [
+    "@nuxt/image",
     "nuxt-security",
     "@nuxtjs/eslint-module",
     "@nuxtjs/tailwindcss",
@@ -7,6 +8,7 @@ export default defineNuxtConfig({
     "nuxt-icon",
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
+    "@nuxtjs/color-mode",
   ],
   runtimeConfig: {
     public: {
@@ -29,5 +31,10 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
+  },
+  colorMode: {
+    preference: "system", // default theme
+    dataValue: "theme", // activate data-theme in <html> tag
+    classSuffix: "",
   },
 });

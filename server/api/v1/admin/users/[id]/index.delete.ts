@@ -2,7 +2,7 @@ import { roleGuard } from "../../../../../guards";
 
 export default defineEventHandler(async (event) => {
   try {
-    roleGuard(event, ["admin", "editor", "user"]);
+    roleGuard(event, ["admin"]);
 
     const targetUserId = event.context.params?.id;
 
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
       },
       data: {
         deleted: true,
-        email: "!deleted!" + user.email,
+        email: "!deleted!__" + user.email,
       },
     });
 

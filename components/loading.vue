@@ -35,9 +35,11 @@ const loading = useLoading();
           ></animateTransform>
         </circle>
       </svg>
-      <h2 v-if="loading.hint" class="text-2xl text-white">
-        {{ loading.hint }}
-      </h2>
+      <client-only>
+        <h2 v-if="loading?.hint" class="text-2xl text-white">
+          {{ loading.hint }}
+        </h2>
+      </client-only>
     </div>
   </section>
 </template>

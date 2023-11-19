@@ -3,7 +3,7 @@ import { roleGuard } from "../../../../../guards";
 
 export default defineEventHandler(async (event) => {
   try {
-    roleGuard(event, ["admin", "user"]);
+    roleGuard(event, ["admin"]);
 
     const body = await readBody(event);
 
@@ -12,6 +12,13 @@ export default defineEventHandler(async (event) => {
     if (targetUserId === event.context.user.id) {
       throw new HTTPException({
         message: "You can't edit your own admin user!",
+        status_code: 403,
+      });
+    }
+
+    if (event.context.user.role !== "admin" && body?.role === "admin") {
+      throw new HTTPException({
+        message: "You have no permission to set admin users!",
         status_code: 403,
       });
     }

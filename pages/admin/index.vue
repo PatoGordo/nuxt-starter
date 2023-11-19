@@ -3,6 +3,9 @@ import Swal from "sweetalert2";
 import { api } from "~/services/api";
 import { useLoading } from "~/store/loading";
 import { UserRole } from "~/types/entities/auth/user";
+import type { AnalyticsResponse } from "~/types/entities/users/analytics";
+
+const userAnalytics = ref<AnalyticsResponse | null>(null);
 
 const { start, end } = useLoading();
 
@@ -20,6 +23,24 @@ const handleGetTheFeature = async () => {
   }
 };
 
+const handleGetAnalytics = async () => {
+  try {
+    start("Loading analytics...");
+
+    const res = await api.get("/v1/admin/users/analytics");
+
+    userAnalytics.value = res.data.result;
+  } catch (error) {
+    handleError(error);
+  } finally {
+    end();
+  }
+};
+
+onMounted(async () => {
+  await handleGetAnalytics();
+});
+
 definePageMeta({
   middleware: "admin-and-editor-only",
 });
@@ -34,7 +55,7 @@ definePageMeta({
     >
       <role-guard :allowed-roles="[UserRole.admin]">
         <div
-          class="card bg-base-200 rounded-box flex flex-col items-start justify-center gap-3 p-5"
+          class="min-h-[160px] card bg-base-200 rounded-box flex flex-col items-start justify-center gap-3 p-5"
         >
           <div class="flex flex-row items-center w-full justify-between">
             <div class="flex flex-row items-center justify-start gap-2">
@@ -60,9 +81,18 @@ definePageMeta({
           </div>
 
           <div class="flex flex-row items-center justify-between gap-4 w-full">
-            <h2 class="text-3xl font-bold">0</h2>
+            <h2 class="text-3xl font-bold">{{ userAnalytics?.total || 0 }}</h2>
 
-            <h3 class="text-lg text-success">+ 84%</h3>
+            <h3
+              class="text-lg"
+              :class="
+                (userAnalytics?.monthly?.growth || 0) > 0
+                  ? 'text-success'
+                  : 'text-error'
+              "
+            >
+              {{ userAnalytics?.monthly?.growth || 0 }}%
+            </h3>
           </div>
 
           <div class="grid grid-cols-2 gap-4 w-full">
@@ -75,7 +105,7 @@ definePageMeta({
       </role-guard>
 
       <div
-        class="card bg-base-200 rounded-box flex flex-col items-start justify-between gap-3 p-5"
+        class="min-h-[160px] card bg-base-200 rounded-box flex flex-col items-start justify-between gap-3 p-5"
       >
         <div class="flex flex-row items-center w-full justify-between">
           <div class="flex flex-row items-center justify-start gap-2">

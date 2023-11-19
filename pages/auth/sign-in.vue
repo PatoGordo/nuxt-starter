@@ -62,7 +62,7 @@ definePageMeta({
     <div
       class="page-content-auth flex flex-col items-center justify-center h-full"
     >
-      <h2 class="page-title pb-0">Login to {{ appConfig.appName }}</h2>
+      <h2 class="page-title pb-0">Login to {{ appConfig?.appName }}</h2>
 
       <form
         class="mt-2 w-full flex flex-col items-start justify-start gap-4"

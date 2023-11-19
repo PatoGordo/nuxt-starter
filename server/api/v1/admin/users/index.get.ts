@@ -2,7 +2,7 @@ import { roleGuard } from "../../../../guards";
 
 export default defineEventHandler(async (event) => {
   try {
-    roleGuard(event, ["admin", "editor", "user"]);
+    roleGuard(event, ["admin", "editor"]);
 
     const user = await prismaClient.user.findMany({
       where: {

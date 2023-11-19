@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { UserRole } from "~/types/entities/auth/user";
 
+const colorMode = useColorMode();
 const route = useRoute();
 const isDrawerOpen = ref(false);
 
@@ -27,11 +28,20 @@ const toggleDrawerOpen = () => {
     >
       <div class="flex flex-row w-full items-center justify-between mb-8">
         <nuxt-link to="/dashboard" @click="isDrawerOpen = false">
-          <img
-            src="/images/logo-green-white.png"
-            alt="Your app logo's"
-            class="w-24"
-          />
+          <template v-if="colorMode.preference === 'light'">
+            <nuxt-img
+              src="/images/logo-green-black.png"
+              alt="Your app logo's"
+              class="w-24"
+            />
+          </template>
+          <template v-else>
+            <nuxt-img
+              src="/images/logo-green-white.png"
+              alt="Your app logo's"
+              class="w-24"
+            />
+          </template>
         </nuxt-link>
 
         <button class="btn btn-circle lg:hidden" @click="isDrawerOpen = false">

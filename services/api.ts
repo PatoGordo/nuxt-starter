@@ -1,4 +1,5 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
+import axios from "axios";
+import type { AxiosResponse, AxiosRequestConfig } from "axios";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { ErrorCodes } from "~/constants/error-codes";
@@ -18,11 +19,11 @@ api.interceptors.response.use(
 
     const response = res.response as AxiosResponse;
 
-    if (response?.status === 403) {
-      router.push("/403");
+    // if (response?.status === 403) {
+    //   router.push("/403");
 
-      throw new Error("<<ignore>>");
-    }
+    //   throw new Error("<<ignore>>");
+    // }
 
     if (
       response?.status === 503 &&

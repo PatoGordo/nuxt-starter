@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import { useLoading } from "./loading";
 import { authConfig } from "~/config/auth";
 import { api, apiBaseURL } from "~/services/api";
-import { User } from "~/types/entities/auth/user";
+import type { User } from "~/types/entities/auth/user";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -81,6 +81,24 @@ export const useAuthStore = defineStore(
       api.defaults.headers.common.Authorization = `Bearer ${token?.value}`;
     };
 
+    const updateUserData = async () => {
+      if (!user || moment(sessionExpiresAt?.value).isBefore(moment())) {
+        return;
+      }
+
+      try {
+        start("Updating data...");
+
+        const res = await api.get<{ result: User }>("/v1/user/me");
+
+        user.value = res.data.result;
+      } catch (error) {
+        handleError(error);
+      } finally {
+        end();
+      }
+    };
+
     return {
       token,
       refreshToken,
@@ -91,6 +109,7 @@ export const useAuthStore = defineStore(
       signIn,
       updateServicesInfo,
       handleRefreshToken,
+      updateUserData,
     };
   },
   {
