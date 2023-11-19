@@ -82,7 +82,7 @@ export const useAuthStore = defineStore(
     };
 
     const updateUserData = async () => {
-      if (!user || moment(sessionExpiresAt?.value).isBefore(moment())) {
+      if (!user.value || moment(sessionExpiresAt?.value).isBefore(moment())) {
         return;
       }
 

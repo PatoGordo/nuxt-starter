@@ -35,6 +35,7 @@ api.interceptors.response.use(
     }
 
     if (
+      !response?.config?.url?.includes("/v1/auth/refresh-token") &&
       response?.status === 401 &&
       response?.data?.error_code === ErrorCodes.SESSION_EXPIRED
     ) {
